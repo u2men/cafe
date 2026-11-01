@@ -14,6 +14,20 @@
 		// The path to the directory containing the `index.html` file to be served at `/`
 		"directory": "./public"
 	},
+	"d1_databases": [
+		{
+			"binding": "CAFEDB",
+			"database_name": "cafedb",
+			"database_id": "2414d57f-85ca-41d7-8f90-e4036449dcdb",
+			"migrations_dir": "./db/migration"
+		}
+	],
+	"r2_buckets": [
+		{
+			"binding": "CAFE_IMAGES",
+			"bucket_name": "cafe-images"
+		}
+	],
 	"observability": {
 		"enabled": true
 	},

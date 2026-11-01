@@ -1,3 +1,9 @@
 ###
 GET http://localhost:8788/api/products
 Accept: application/json
+
+###
+PUT http://localhost:8788/api/product/1/upload
+Content-Type: multipart/form-data
+
+file=@/path/to/your/file1.jpg

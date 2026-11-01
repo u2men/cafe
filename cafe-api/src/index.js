@@ -17,39 +17,45 @@ export default {
 			case '/random':
 				return new Response(crypto.randomUUID());
 			case '/api/products':
-				return new Response(JSON.stringify([
-					{
-						name: "Caffe Latte",
-						category: "hot",
-						price: "$4.50",
-						description: "Espresso softened with velvety steamed milk."
-					},
-					{
-						name: "Iced Coffee",
-						category: "cold",
-						price: "$3.50",
-						description: "Chilled coffee served over ice."
-					},
-					{
-						name: "Cappuccino",
-						category: "hot",
-						price: "$4.00",
-						description: "Espresso with steamed milk and a layer of foam."
-					},
-					{
-						name: "Mocha",
-						category: "hot",
-						price: "$4.75",
-						description: "Espresso with chocolate and steamed milk."
-					}
-				]), {
+				const products = await env.CAFEDB.prepare("SELECT * FROM menu_items").all();
+				return new Response(JSON.stringify(products.results), {
 					headers: {
 						"Content-Type": "application/json",
 						"Access-Control-Allow-Origin": "*"
 					 }
 				});
 			//       <article class="item" data-category="hot" data-name="caffe latte"><div class="item-image"><svg viewBox="0 0 200 200" aria-hidden="true"><use href="#latte"/></svg></div><div><h2>Caffe Latte</h2><p class="price">$4.50</p><p class="description">Espresso softened with velvety steamed milk.</p></div><button class="add" aria-label="Add Caffe Latte to order">+</button></article>
+			case '/api/product/upload':
+				if (request.method === "OPTIONS") { 
+					return new Response(null, {
+						headers: {
+							"Access-Control-Allow-Origin": "*",
+							"Access-Control-Allow-Methods": "PUT, OPTIONS",
+							"Access-Control-Allow-Headers": "Content-Type"
+						}
+					});
+				}
 
+				if (request.method === 'PUT') {
+					const formData = await request.formData();
+					const file = formData.get('file');
+					if (file) {
+						const key = file.name;
+						const id = 1; // Extract the product ID from the URL
+						await env.CAFE_IMAGES.put(key, file.stream());
+						await env.CAFEDB
+							.prepare("UPDATE menu_items SET image_key = ? WHERE id = ?")
+							.bind(key, id)
+							.run();
+						return new Response(JSON.stringify({ key }), {
+							headers: {
+								"Access-Control-Allow-Origin": "*",
+								"Access-Control-Allow-Methods": "PUT, OPTIONS",
+								"Access-Control-Allow-Headers": "Content-Type"							}
+						});
+					}
+				}
+				return new Response('Invalid request', { status: 400 });
 			default:
 				return new Response('Not Found', { status: 404 });
 		}

@@ -9,7 +9,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev:api": "npm run dev --workspace @cafe/api",
-    "dev:front": "npm run dev --workspace @cafe/front"
+    "dev:front": "npm run dev --workspace @cafe/front",
+    "db:migrate:local": "npm run db:migrate:local --workspace @cafe/api",
+    "db:migrate:remote": "npm run db:migrate:remote --workspace @cafe/api"
   },
   "workspaces": [
     "cafe-api",

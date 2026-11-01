@@ -1,0 +1,15 @@
+CREATE TABLE menu_items (
+  id INTEGER PRIMARY KEY,
+  name TEXT NOT NULL,
+  price INTEGER NOT NULL,
+  image_key TEXT,
+  category TEXT NOT NULL,
+  description TEXT NOT NULL
+);
+
+CREATE TABLE orders (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  item_id INTEGER NOT NULL REFERENCES menu_items(id),
+  status TEXT NOT NULL DEFAULT 'received',
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
