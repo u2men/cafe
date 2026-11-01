@@ -1,0 +1,4 @@
+###
+GET http://localhost:8788/api/products
+Accept: application/json
+Origin: http://localhost:8787

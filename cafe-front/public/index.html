@@ -1,113 +1,451 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Café Menu</title>
-  <style>
-    * { box-sizing: border-box; }
-    :root { color: #181716; font-family: Arial, Helvetica, sans-serif; background: #f4f1ee; }
-    body { margin: 0; }
-    button, input { font: inherit; }
-    button { cursor: pointer; }
-    .app { width: min(100%, 480px); min-height: 100vh; margin: auto; background: #fff; box-shadow: 0 0 35px #2f201012; padding-bottom: 80px; }
-    .hero { height: 245px; overflow: hidden; background: #6e402c; }
-    .hero svg { width: 100%; height: 100%; display: block; object-fit: cover; }
-    main { padding: 28px 24px 0; }
-    h1 { margin: 0 0 24px; font-size: 30px; letter-spacing: -1.1px; }
-    .search { display: flex; align-items: center; gap: 12px; width: 100%; max-width: 270px; height: 54px; padding: 0 17px; border: 1px solid #e6e3e0; border-radius: 30px; color: #888; }
-    .search svg { flex: none; width: 18px; height: 18px; }
-    .search input { min-width: 0; width: 100%; border: 0; outline: 0; color: #222; font-size: 13px; }
-    .search input::placeholder { color: #999; }
-    .filters { display: flex; gap: 7px; margin: 18px 0 14px; overflow-x: auto; scrollbar-width: none; }
-    .filters::-webkit-scrollbar { display: none; }
-    .filter { flex: none; border: 0; border-radius: 22px; padding: 12px 14px; background: #f5f4f2; color: #777; font-size: 11px; }
-    .filter.active { color: white; background: #191918; }
-    .item { display: grid; grid-template-columns: 84px minmax(0, 1fr) 42px; gap: 16px; align-items: center; min-height: 116px; border-bottom: 1px solid #ebe8e5; }
-    .item-image { width: 84px; height: 84px; border-radius: 9px; overflow: hidden; background: #a67556; }
-    .item-image svg { width: 100%; height: 100%; display: block; }
-    .item h2 { margin: 0 0 7px; font-size: 15px; letter-spacing: -.2px; }
-    .price { margin: 0 0 8px; font-size: 13px; }
-    .description { margin: 0; color: #77716d; font-family: Georgia, serif; font-size: 10px; line-height: 1.35; }
-    .add { width: 42px; height: 42px; border: 0; border-radius: 50%; background: #824018; color: white; font-size: 25px; font-weight: 300; line-height: 1; }
-    .add:active { transform: scale(.94); }
-    .empty { padding: 35px 0; color: #777; font-size: 14px; }
-    .nav { position: fixed; z-index: 2; bottom: 0; left: 50%; transform: translateX(-50%); display: grid; grid-template-columns: repeat(4, 1fr); width: min(100%, 480px); height: 80px; background: #fff; border-top: 1px solid #eae7e4; }
-    .nav button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 0; border: 0; background: transparent; color: #777; font-size: 10px; }
-    .nav button.active { color: #171717; font-weight: bold; }
-    .nav svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
-    .cart-count { display: none; position: absolute; margin: -32px 0 0 24px; padding: 2px 5px; border-radius: 10px; background: #824018; color: white; font-size: 9px; }
-    .cart-count.visible { display: block; }
-    @media (max-width: 350px) { .hero { height: 40vw; min-height: 150px; } main { padding: 22px 20px 0; } h1 { font-size: 27px; } .item { grid-template-columns: 72px minmax(0, 1fr) 38px; gap: 12px; min-height: 105px; } .item-image { width: 72px; height: 72px; } .add { width: 38px; height: 38px; } }
-  </style>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Café Menu</title>
+	<style>
+		* {
+			box-sizing: border-box;
+		}
+
+		:root {
+			color: #181716;
+			font-family: Arial, Helvetica, sans-serif;
+			background: #f4f1ee;
+		}
+
+		body {
+			margin: 0;
+		}
+
+		button,
+		input {
+			font: inherit;
+		}
+
+		button {
+			cursor: pointer;
+		}
+
+		.app {
+			width: min(100%, 480px);
+			min-height: 100vh;
+			margin: auto;
+			background: #fff;
+			box-shadow: 0 0 35px #2f201012;
+			padding-bottom: 80px;
+		}
+
+		.hero {
+			height: 245px;
+			overflow: hidden;
+			background: #6e402c;
+		}
+
+		.hero svg {
+			width: 100%;
+			height: 100%;
+			display: block;
+			object-fit: cover;
+		}
+
+		main {
+			padding: 28px 24px 0;
+		}
+
+		h1 {
+			margin: 0 0 24px;
+			font-size: 30px;
+			letter-spacing: -1.1px;
+		}
+
+		.search {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			width: 100%;
+			max-width: 270px;
+			height: 54px;
+			padding: 0 17px;
+			border: 1px solid #e6e3e0;
+			border-radius: 30px;
+			color: #888;
+		}
+
+		.search svg {
+			flex: none;
+			width: 18px;
+			height: 18px;
+		}
+
+		.search input {
+			min-width: 0;
+			width: 100%;
+			border: 0;
+			outline: 0;
+			color: #222;
+			font-size: 13px;
+		}
+
+		.search input::placeholder {
+			color: #999;
+		}
+
+		.filters {
+			display: flex;
+			gap: 7px;
+			margin: 18px 0 14px;
+			overflow-x: auto;
+			scrollbar-width: none;
+		}
+
+		.filters::-webkit-scrollbar {
+			display: none;
+		}
+
+		.filter {
+			flex: none;
+			border: 0;
+			border-radius: 22px;
+			padding: 12px 14px;
+			background: #f5f4f2;
+			color: #777;
+			font-size: 11px;
+		}
+
+		.filter.active {
+			color: white;
+			background: #191918;
+		}
+
+		.item {
+			display: grid;
+			grid-template-columns: 84px minmax(0, 1fr) 42px;
+			gap: 16px;
+			align-items: center;
+			min-height: 116px;
+			border-bottom: 1px solid #ebe8e5;
+		}
+
+		.item-image {
+			width: 84px;
+			height: 84px;
+			border-radius: 9px;
+			overflow: hidden;
+			background: #a67556;
+		}
+
+		.item-image svg {
+			width: 100%;
+			height: 100%;
+			display: block;
+		}
+
+		.item h2 {
+			margin: 0 0 7px;
+			font-size: 15px;
+			letter-spacing: -.2px;
+		}
+
+		.price {
+			margin: 0 0 8px;
+			font-size: 13px;
+		}
+
+		.description {
+			margin: 0;
+			color: #77716d;
+			font-family: Georgia, serif;
+			font-size: 10px;
+			line-height: 1.35;
+		}
+
+		.add {
+			width: 42px;
+			height: 42px;
+			border: 0;
+			border-radius: 50%;
+			background: #824018;
+			color: white;
+			font-size: 25px;
+			font-weight: 300;
+			line-height: 1;
+		}
+
+		.add:active {
+			transform: scale(.94);
+		}
+
+		.empty {
+			padding: 35px 0;
+			color: #777;
+			font-size: 14px;
+		}
+
+		.nav {
+			position: fixed;
+			z-index: 2;
+			bottom: 0;
+			left: 50%;
+			transform: translateX(-50%);
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			width: min(100%, 480px);
+			height: 80px;
+			background: #fff;
+			border-top: 1px solid #eae7e4;
+		}
+
+		.nav button {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 6px;
+			padding: 0;
+			border: 0;
+			background: transparent;
+			color: #777;
+			font-size: 10px;
+		}
+
+		.nav button.active {
+			color: #171717;
+			font-weight: bold;
+		}
+
+		.nav svg {
+			width: 22px;
+			height: 22px;
+			fill: none;
+			stroke: currentColor;
+			stroke-width: 1.4;
+			stroke-linecap: round;
+			stroke-linejoin: round;
+		}
+
+		.cart-count {
+			display: none;
+			position: absolute;
+			margin: -32px 0 0 24px;
+			padding: 2px 5px;
+			border-radius: 10px;
+			background: #824018;
+			color: white;
+			font-size: 9px;
+		}
+
+		.cart-count.visible {
+			display: block;
+		}
+
+		@media (max-width: 350px) {
+			.hero {
+				height: 40vw;
+				min-height: 150px;
+			}
+
+			main {
+				padding: 22px 20px 0;
+			}
+
+			h1 {
+				font-size: 27px;
+			}
+
+			.item {
+				grid-template-columns: 72px minmax(0, 1fr) 38px;
+				gap: 12px;
+				min-height: 105px;
+			}
+
+			.item-image {
+				width: 72px;
+				height: 72px;
+			}
+
+			.add {
+				width: 38px;
+				height: 38px;
+			}
+		}
+	</style>
 </head>
+
 <body>
-<!-- Reusable, self-contained illustrations keep the menu available offline. -->
-<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
-  <defs>
-    <linearGradient id="wood" x2="1" y2="1"><stop stop-color="#35221c"/><stop offset=".45" stop-color="#a56c49"/><stop offset="1" stop-color="#38221c"/></linearGradient>
-    <radialGradient id="coffee"><stop stop-color="#dba66c"/><stop offset=".7" stop-color="#a85c2d"/><stop offset="1" stop-color="#663419"/></radialGradient>
-    <linearGradient id="cup" x2=".8" y2="1"><stop stop-color="#51443d"/><stop offset=".4" stop-color="#171412"/><stop offset="1" stop-color="#080807"/></linearGradient>
-    <linearGradient id="ice" x2="1" y2="1"><stop stop-color="#e49c54"/><stop offset=".5" stop-color="#4c210f"/><stop offset="1" stop-color="#150d0a"/></linearGradient>
-    <symbol id="latte" viewBox="0 0 200 200"><rect width="200" height="200" fill="url(#wood)"/><path d="M0 154L200 119M0 179L200 144" stroke="#d6a27d" opacity=".25" stroke-width="4"/><ellipse cx="99" cy="160" rx="76" ry="19" fill="#2d1b15" opacity=".5"/><path d="M24 70 Q22 162 99 166 Q176 162 177 70" fill="url(#cup)"/><ellipse cx="100" cy="70" rx="77" ry="40" fill="#d9bb9f"/><ellipse cx="100" cy="69" rx="69" ry="34" fill="url(#coffee)"/><path d="M100 94 C94 79 69 80 65 62 C77 63 92 71 100 82 C108 71 123 63 135 62 C131 80 106 79 100 94Z" fill="#f7e9d5"/><path d="M100 88 C89 76 82 75 72 70 M100 88 C111 76 118 75 128 70 M100 88 L100 57" fill="none" stroke="#c8874d" stroke-width="3"/></symbol>
-    <symbol id="iced" viewBox="0 0 200 200"><rect width="200" height="200" fill="url(#wood)"/><ellipse cx="99" cy="173" rx="62" ry="12" fill="#21120e" opacity=".4"/><path d="M50 42 L61 167 Q100 183 139 167 L150 42Z" fill="#d7b49a" opacity=".65"/><path d="M54 57 L65 163 Q100 175 135 163 L146 57Z" fill="url(#ice)"/><ellipse cx="100" cy="55" rx="46" ry="14" fill="#4b2414"/><g fill="#edbe8a" opacity=".7"><path d="M65 61l21-8 12 16-18 10z"/><path d="M106 55l22 5-5 18-20-3z"/><path d="M75 91l17-9 12 15-18 9z"/><path d="M111 103l18-7 7 16-19 8z"/></g><path d="M121 55l17-42" stroke="#27211c" stroke-width="5"/></symbol>
-    <symbol id="cappuccino" viewBox="0 0 200 200"><rect width="200" height="200" fill="#ba8e70"/><ellipse cx="104" cy="161" rx="82" ry="22" fill="#eee3d8"/><path d="M149 73 Q190 64 182 101 Q178 121 153 119" fill="none" stroke="#eee7de" stroke-width="12"/><path d="M29 71 Q31 152 99 156 Q166 152 169 71" fill="#eee8df"/><ellipse cx="99" cy="71" rx="70" ry="35" fill="#f6eee3"/><ellipse cx="99" cy="70" rx="61" ry="28" fill="url(#coffee)"/><ellipse cx="99" cy="70" rx="45" ry="20" fill="#e4bd92"/><path d="M99 83 Q72 67 78 61 Q90 59 99 72 Q108 59 120 61 Q126 67 99 83" fill="#fbf0df"/></symbol>
-    <symbol id="matcha" viewBox="0 0 200 200"><rect width="200" height="200" fill="#a78364"/><ellipse cx="100" cy="158" rx="79" ry="20" fill="#eadccb"/><path d="M146 76 Q187 66 179 102 Q176 119 153 119" fill="none" stroke="#eae3d9" stroke-width="12"/><path d="M31 70 Q33 151 100 155 Q167 151 169 70" fill="#e8e3d8"/><ellipse cx="100" cy="70" rx="69" ry="34" fill="#eee5d6"/><ellipse cx="100" cy="70" rx="61" ry="28" fill="#768638"/><ellipse cx="100" cy="70" rx="45" ry="20" fill="#a7ad69"/><path d="M100 83 Q73 67 79 61 Q91 59 100 72 Q109 59 121 61 Q127 67 100 83" fill="#f4edda"/></symbol>
-  </defs>
-</svg>
-<div class="app">
-  <div class="hero" aria-label="A cup of latte with latte art" role="img"><svg viewBox="0 20 200 105" preserveAspectRatio="xMidYMid slice"><use href="#latte"/></svg></div>
-  <main>
-    <h1>Menu</h1>
-    <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 4.5 4.5"/></svg><input type="search" placeholder="Find your coffee..." aria-label="Find your coffee"></label>
-    <div class="filters" aria-label="Coffee categories">
-      <button class="filter active" data-filter="all" aria-pressed="true">All coffees</button><button class="filter" data-filter="hot" aria-pressed="false">Hot coffee</button><button class="filter" data-filter="iced" aria-pressed="false">Iced coffee</button><button class="filter" data-filter="non-coffee" aria-pressed="false">Non-coffee</button>
-    </div>
-    <div class="items">
-      <article class="item" data-category="hot" data-name="caffe latte"><div class="item-image"><svg viewBox="0 0 200 200" aria-hidden="true"><use href="#latte"/></svg></div><div><h2>Caffe Latte</h2><p class="price">$4.50</p><p class="description">Espresso softened with velvety steamed milk.</p></div><button class="add" aria-label="Add Caffe Latte to order">+</button></article>
-      <article class="item" data-category="iced" data-name="iced americano"><div class="item-image"><svg viewBox="0 0 200 200" aria-hidden="true"><use href="#iced"/></svg></div><div><h2>Iced Americano</h2><p class="price">$3.50</p><p class="description">Espresso, cool water, and a little room to unwind.</p></div><button class="add" aria-label="Add Iced Americano to order">+</button></article>
-      <article class="item" data-category="hot" data-name="cappuccino"><div class="item-image"><svg viewBox="0 0 200 200" aria-hidden="true"><use href="#cappuccino"/></svg></div><div><h2>Cappuccino</h2><p class="price">$4.50</p><p class="description">Rich espresso beneath a light, airy milk foam.</p></div><button class="add" aria-label="Add Cappuccino to order">+</button></article>
-      <article class="item" data-category="non-coffee" data-name="matcha latte"><div class="item-image"><svg viewBox="0 0 200 200" aria-hidden="true"><use href="#matcha"/></svg></div><div><h2>Matcha Latte</h2><p class="price">$5.00</p><p class="description">Earthy matcha, gently whisked with steamed milk.</p></div><button class="add" aria-label="Add Matcha Latte to order">+</button></article>
-      <p class="empty" hidden>No drinks found.</p>
-    </div>
-  </main>
-  <nav class="nav" aria-label="Main navigation">
-    <button type="button"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10h-6v-6H9v6H3z"/></svg>Home</button>
-    <button type="button" class="active" aria-current="page"><svg viewBox="0 0 24 24"><path d="M4 8h13v7a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5zM17 10h2a2 2 0 0 1 0 4h-2M7 3v2M11 3v2M15 3v2M3 22h16"/></svg>Menu</button>
-    <button type="button"><svg viewBox="0 0 24 24"><path d="M5 8h14l1 13H4zM9 9V6a3 3 0 0 1 6 0v3"/></svg><span class="cart-count" aria-live="polite"></span>Orders</button>
-    <button type="button"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/></svg>Profile</button>
-  </nav>
-</div>
-<script>
-  const filters = document.querySelectorAll('.filter');
-  const items = document.querySelectorAll('.item');
-  const search = document.querySelector('input[type="search"]');
-  let category = 'all';
-  function updateMenu() {
-    const query = search.value.trim().toLowerCase();
-    let visible = 0;
-    items.forEach(item => {
-      const show = (category === 'all' || item.dataset.category === category) && item.dataset.name.includes(query);
-      item.hidden = !show;
-      item.style.display = show ? '' : 'none';
-      if (show) visible++;
-    });
-    document.querySelector('.empty').hidden = visible > 0;
-  }
-  filters.forEach(button => button.addEventListener('click', () => {
-    category = button.dataset.filter;
-    filters.forEach(filter => { const selected = filter === button; filter.classList.toggle('active', selected); filter.setAttribute('aria-pressed', selected); });
-    updateMenu();
-  }));
-  search.addEventListener('input', updateMenu);
-  let count = 0;
-  document.querySelectorAll('.add').forEach(button => button.addEventListener('click', () => {
-    count++;
-    const badge = document.querySelector('.cart-count');
-    badge.textContent = count;
-    badge.classList.add('visible');
-    badge.setAttribute('aria-label', `${count} items in order`);
-  }));
-</script>
+	<!-- Reusable, self-contained illustrations keep the menu available offline. -->
+	<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden"
+		aria-hidden="true">
+		<defs>
+			<linearGradient id="wood" x2="1" y2="1">
+				<stop stop-color="#35221c" />
+				<stop offset=".45" stop-color="#a56c49" />
+				<stop offset="1" stop-color="#38221c" />
+			</linearGradient>
+			<radialGradient id="coffee">
+				<stop stop-color="#dba66c" />
+				<stop offset=".7" stop-color="#a85c2d" />
+				<stop offset="1" stop-color="#663419" />
+			</radialGradient>
+			<linearGradient id="cup" x2=".8" y2="1">
+				<stop stop-color="#51443d" />
+				<stop offset=".4" stop-color="#171412" />
+				<stop offset="1" stop-color="#080807" />
+			</linearGradient>
+			<linearGradient id="ice" x2="1" y2="1">
+				<stop stop-color="#e49c54" />
+				<stop offset=".5" stop-color="#4c210f" />
+				<stop offset="1" stop-color="#150d0a" />
+			</linearGradient>
+			<symbol id="latte" viewBox="0 0 200 200">
+				<rect width="200" height="200" fill="url(#wood)" />
+				<path d="M0 154L200 119M0 179L200 144" stroke="#d6a27d" opacity=".25" stroke-width="4" />
+				<ellipse cx="99" cy="160" rx="76" ry="19" fill="#2d1b15" opacity=".5" />
+				<path d="M24 70 Q22 162 99 166 Q176 162 177 70" fill="url(#cup)" />
+				<ellipse cx="100" cy="70" rx="77" ry="40" fill="#d9bb9f" />
+				<ellipse cx="100" cy="69" rx="69" ry="34" fill="url(#coffee)" />
+				<path d="M100 94 C94 79 69 80 65 62 C77 63 92 71 100 82 C108 71 123 63 135 62 C131 80 106 79 100 94Z"
+					fill="#f7e9d5" />
+				<path d="M100 88 C89 76 82 75 72 70 M100 88 C111 76 118 75 128 70 M100 88 L100 57" fill="none"
+					stroke="#c8874d" stroke-width="3" />
+			</symbol>
+			<symbol id="iced" viewBox="0 0 200 200">
+				<rect width="200" height="200" fill="url(#wood)" />
+				<ellipse cx="99" cy="173" rx="62" ry="12" fill="#21120e" opacity=".4" />
+				<path d="M50 42 L61 167 Q100 183 139 167 L150 42Z" fill="#d7b49a" opacity=".65" />
+				<path d="M54 57 L65 163 Q100 175 135 163 L146 57Z" fill="url(#ice)" />
+				<ellipse cx="100" cy="55" rx="46" ry="14" fill="#4b2414" />
+				<g fill="#edbe8a" opacity=".7">
+					<path d="M65 61l21-8 12 16-18 10z" />
+					<path d="M106 55l22 5-5 18-20-3z" />
+					<path d="M75 91l17-9 12 15-18 9z" />
+					<path d="M111 103l18-7 7 16-19 8z" />
+				</g>
+				<path d="M121 55l17-42" stroke="#27211c" stroke-width="5" />
+			</symbol>
+			<symbol id="cappuccino" viewBox="0 0 200 200">
+				<rect width="200" height="200" fill="#ba8e70" />
+				<ellipse cx="104" cy="161" rx="82" ry="22" fill="#eee3d8" />
+				<path d="M149 73 Q190 64 182 101 Q178 121 153 119" fill="none" stroke="#eee7de" stroke-width="12" />
+				<path d="M29 71 Q31 152 99 156 Q166 152 169 71" fill="#eee8df" />
+				<ellipse cx="99" cy="71" rx="70" ry="35" fill="#f6eee3" />
+				<ellipse cx="99" cy="70" rx="61" ry="28" fill="url(#coffee)" />
+				<ellipse cx="99" cy="70" rx="45" ry="20" fill="#e4bd92" />
+				<path d="M99 83 Q72 67 78 61 Q90 59 99 72 Q108 59 120 61 Q126 67 99 83" fill="#fbf0df" />
+			</symbol>
+			<symbol id="matcha" viewBox="0 0 200 200">
+				<rect width="200" height="200" fill="#a78364" />
+				<ellipse cx="100" cy="158" rx="79" ry="20" fill="#eadccb" />
+				<path d="M146 76 Q187 66 179 102 Q176 119 153 119" fill="none" stroke="#eae3d9" stroke-width="12" />
+				<path d="M31 70 Q33 151 100 155 Q167 151 169 70" fill="#e8e3d8" />
+				<ellipse cx="100" cy="70" rx="69" ry="34" fill="#eee5d6" />
+				<ellipse cx="100" cy="70" rx="61" ry="28" fill="#768638" />
+				<ellipse cx="100" cy="70" rx="45" ry="20" fill="#a7ad69" />
+				<path d="M100 83 Q73 67 79 61 Q91 59 100 72 Q109 59 121 61 Q127 67 100 83" fill="#f4edda" />
+			</symbol>
+		</defs>
+	</svg>
+	<div class="app">
+		<div class="hero" aria-label="A cup of latte with latte art" role="img"><svg viewBox="0 20 200 105"
+				preserveAspectRatio="xMidYMid slice">
+				<use href="#latte" />
+			</svg></div>
+		<main>
+			<h1>Menu</h1>
+			<label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+					<circle cx="10.5" cy="10.5" r="6.5" />
+					<path d="m15.5 15.5 4.5 4.5" />
+				</svg><input type="search" placeholder="Find your coffee..." aria-label="Find your coffee"></label>
+			<div class="filters" aria-label="Coffee categories">
+				<button class="filter active" data-filter="all" aria-pressed="true">All coffees</button><button
+					class="filter" data-filter="hot" aria-pressed="false">Hot coffee</button><button class="filter"
+					data-filter="iced" aria-pressed="false">Iced coffee</button><button class="filter"
+					data-filter="non-coffee" aria-pressed="false">Non-coffee</button>
+			</div>
+			<div class="items">
+				<!-- <article class="item" data-category="hot" data-name="caffe latte">
+					<div class="item-image"><svg viewBox="0 0 200 200" aria-hidden="true">
+							<use href="#latte" />
+						</svg></div>
+					<div>
+						<h2>Caffe Latte</h2>
+						<p class="price">$4.50</p>
+						<p class="description">Espresso softened with velvety steamed milk.</p>
+					</div><button class="add" aria-label="Add Caffe Latte to order">+</button>
+				</article>
+				<article class="item" data-category="iced" data-name="iced americano">
+					<div class="item-image"><svg viewBox="0 0 200 200" aria-hidden="true">
+							<use href="#iced" />
+						</svg></div>
+					<div>
+						<h2>Iced Americano</h2>
+						<p class="price">$3.50</p>
+						<p class="description">Espresso, cool water, and a little room to unwind.</p>
+					</div><button class="add" aria-label="Add Iced Americano to order">+</button>
+				</article>
+				<article class="item" data-category="hot" data-name="cappuccino">
+					<div class="item-image"><svg viewBox="0 0 200 200" aria-hidden="true">
+							<use href="#cappuccino" />
+						</svg></div>
+					<div>
+						<h2>Cappuccino</h2>
+						<p class="price">$4.50</p>
+						<p class="description">Rich espresso beneath a light, airy milk foam.</p>
+					</div><button class="add" aria-label="Add Cappuccino to order">+</button>
+				</article>
+				<article class="item" data-category="non-coffee" data-name="matcha latte">
+					<div class="item-image"><svg viewBox="0 0 200 200" aria-hidden="true">
+							<use href="#matcha" />
+						</svg></div>
+					<div>
+						<h2>Matcha Latte</h2>
+						<p class="price">$5.00</p>
+						<p class="description">Earthy matcha, gently whisked with steamed milk.</p>
+					</div><button class="add" aria-label="Add Matcha Latte to order">+</button>
+				</article> -->
+				<p class="empty" hidden>No drinks found.</p>
+			</div>
+		</main>
+		<nav class="nav" aria-label="Main navigation">
+			<button type="button"><svg viewBox="0 0 24 24">
+					<path d="m3 10 9-7 9 7v10h-6v-6H9v6H3z" />
+				</svg>Home</button>
+			<button type="button" class="active" aria-current="page"><svg viewBox="0 0 24 24">
+					<path
+						d="M4 8h13v7a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5zM17 10h2a2 2 0 0 1 0 4h-2M7 3v2M11 3v2M15 3v2M3 22h16" />
+				</svg>Menu</button>
+			<button type="button"><svg viewBox="0 0 24 24">
+					<path d="M5 8h14l1 13H4zM9 9V6a3 3 0 0 1 6 0v3" />
+				</svg><span class="cart-count" aria-live="polite"></span>Orders</button>
+			<button type="button"><svg viewBox="0 0 24 24">
+					<circle cx="12" cy="7" r="3.5" />
+					<path d="M5 21v-2a7 7 0 0 1 14 0v2" />
+				</svg>Profile</button>
+		</nav>
+	</div>
+	<script>
+		fetch('http://localhost:8788/api/products')
+			.then(response => response.json())
+			.then(products => {
+				const itemsContainer = document.querySelector('.items');
+				itemsContainer.insertAdjacentHTML('beforeend', 
+				products.reduce((acc, product) => {
+					const articleHTML = `<article class="item" data-category="${product.category}" data-name="${product.name.toLowerCase()}">
+											<div class="item-image"><svg viewBox="0 0 200 200" aria-hidden="true"><use href="#${product.name.toLowerCase().replace(/\s+/g, '-')}" /></svg></div>
+											<div>
+												<h2>${product.name}</h2>
+												<p class="price">${product.price}</p>
+												<p class="description">${product.description}</p>
+											</div>
+											<button class="add" aria-label="Add ${product.name} to order">+</button>
+										</article>`;
+					return acc + articleHTML;
+				}, ''));
+
+			});
+	</script>
 </body>
+
 </html>
