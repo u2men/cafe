@@ -427,7 +427,7 @@
     </div>
     <script>
         const env = {
-            IMG_PATH: "https://pub-43d7306b40ba48a8b42c0ddb8803c895.r2.dev",
+            IMG_PATH: "http://images.oyutan.shop",
             API_URL: document.location.hostname == "localhost" ? `http://localhost:8788` : 'https://cafe.uitumen-7dc.workers.dev' }
         fetch(`${env.API_URL}/api/products`)
             .then(response => response.json())
@@ -445,7 +445,7 @@
 												<p class="description">${product.description}</p>
 											</div>
                                             <form style="display:none" method="PUT" enctype="multipart/form-data" action="/api/product/${product.id}/upload">
-                                                <input style="display:none" type="file" name="file" accept="image/*" />
+                                                <input style="display:none" type="file" data-productid="${product.id}" name="file" accept="image/*" />
                                             </form>
 											<button class="add" aria-label="Add ${product.name} to order">+</button>
 										</article>`;
@@ -461,7 +461,7 @@
                         const fileInput = form.querySelector('input[type="file"]');
                         fileInput.addEventListener('change', () => {
                             const formData = new FormData(form);
-                            fetch(`${env.API_URL}/api/product/upload`, {
+                            fetch(`${env.API_URL}/api/product/${fileInput.dataset.productid}/upload`, {
                                 method: 'PUT',
                                 body: formData
                             }).then(response => response.json())

@@ -25,7 +25,11 @@ export default {
 					 }
 				});
 			//       <article class="item" data-category="hot" data-name="caffe latte"><div class="item-image"><svg viewBox="0 0 200 200" aria-hidden="true"><use href="#latte"/></svg></div><div><h2>Caffe Latte</h2><p class="price">$4.50</p><p class="description">Espresso softened with velvety steamed milk.</p></div><button class="add" aria-label="Add Caffe Latte to order">+</button></article>
-			case '/api/product/upload':
+			// Upload product image endpoint with id
+			// Example: PUT /api/product/1/upload
+			
+			case '/api/product/:id/upload':
+				console.log('Upload product image request received');
 				if (request.method === "OPTIONS") { 
 					return new Response(null, {
 						headers: {
@@ -41,7 +45,7 @@ export default {
 					const file = formData.get('file');
 					if (file) {
 						const key = file.name;
-						const id = 1; // Extract the product ID from the URL
+						const id = url.pathname.split('/')[3]; // Extract the product ID from the URL
 						await env.CAFE_IMAGES.put(key, file.stream());
 						await env.CAFEDB
 							.prepare("UPDATE menu_items SET image_key = ? WHERE id = ?")
